@@ -1,6 +1,9 @@
 import { MongoClient, Db } from 'mongodb';
+import * as dotenv from 'dotenv';
 
-const url = 'mongodb://localhost:27017';
+dotenv.config()
+
+const url = process.env.MONGO_URL as string;
 const client = new MongoClient(url);
 
 console.log(`Connecting to MongoDB at ${url}`);
