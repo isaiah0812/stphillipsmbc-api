@@ -17,6 +17,7 @@ const main = async () => {
     await connectDb()
 
     app.use("/events", require("./events"));
+    app.use("/photos", require("./photos"));
   
     app.get("/", (req: Request, res: Response) => {
       res.send("Hello World")
