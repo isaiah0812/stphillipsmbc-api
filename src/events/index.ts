@@ -14,14 +14,13 @@ router.route("/")
   .get((req: Request, res: Response) => {
     events.find({}).toArray((error: MongoError, result?: Document[]) => {
       if(error) {
-        res.status(500).json(new InternalServerError());
+        res.status(500).json(new InternalServerError(error));
         throw error;
       }
 
       res.json(result as Event[] | undefined);
     })
-  })
-  .post(checkJwt, async (req: Request<{}, {}, EventForm>, res: Response) => {
+  }).post(checkJwt, async (req: Request<{}, {}, EventForm>, res: Response) => {
     try {
       const event: Event = new Event(req.body as EventForm);
 
@@ -78,8 +77,7 @@ router.route("/:id")
         res.status(500).json(new InternalServerError(e))
       }
     }
-  })
-  .delete(checkJwt, async (req: Request<{ id: string }, {}, {}>, res: Response) => {
+  }).delete(checkJwt, async (req: Request<{ id: string }, {}, {}>, res: Response) => {
     try {
       const id: string = req.params.id
       
@@ -106,8 +104,7 @@ router.route("/:id")
         res.status(500).json(new InternalServerError(e))
       }
     }
-  })
-  .get(async (req: Request<{ id: string }, {}, {}>, res: Response, next: NextFunction) => {
+  }).get(async (req: Request<{ id: string }, {}, {}>, res: Response, next: NextFunction) => {
     if (req.params.id === "recent") {
       next()
     } else {
@@ -162,6 +159,9 @@ router.route("/recent")
       if (e instanceof MongoServerError) {
         console.error(`MongoServerError: ${e.message}`)
         res.status(500).json(new InternalServerError(e))
+      } else {
+        console.error(e);
+        res.status(500).json(new InternalServerError(e));
       }
     }
   })

@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { connectDb } from './config/db';
 import cors from 'cors';
+import { configCloud } from './config/cloudinary';
 
 const app = express();
 const port = 8080;
@@ -14,7 +15,8 @@ app.use(cors({
 
 const main = async () => {
   try {
-    await connectDb()
+    await connectDb();
+    configCloud();
 
     app.use("/events", require("./events"));
     app.use("/photos", require("./photos"));
@@ -28,7 +30,7 @@ const main = async () => {
     });
 
   } catch(err: any) {
-    throw err
+    throw err;
   }
 }
 
