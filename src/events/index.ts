@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { getDb } from '../config/db'
-import { checkJwt } from '../config/auth'
+import { ADMIN_SCOPE, checkJwt } from '../config/auth'
 import { Document, MongoError, MongoServerError, ObjectId } from 'mongodb'
 import { Event, EventForm } from './model'
 import { InternalServerError, NotFoundError, ValidationError } from '../utils/errorHandling'
@@ -20,7 +20,7 @@ router.route("/")
 
       res.json(result as Event[] | undefined);
     })
-  }).post(checkJwt, async (req: Request<{}, {}, EventForm>, res: Response) => {
+  }).post(checkJwt, ADMIN_SCOPE, async (req: Request<{}, {}, EventForm>, res: Response) => {
     try {
       const event: Event = new Event(req.body as EventForm);
 
@@ -43,7 +43,7 @@ router.route("/")
   })
 
 router.route("/:id")
-  .put(checkJwt, async (req: Request<{ id: string }, {}, EventForm>, res: Response) => {
+  .put(checkJwt, ADMIN_SCOPE, async (req: Request<{ id: string }, {}, EventForm>, res: Response) => {
     try {
       const id: string = req.params.id
       const foundEvent: Event | null = await events.findOne<Event>({ _id: new ObjectId(id) })
@@ -77,7 +77,7 @@ router.route("/:id")
         res.status(500).json(new InternalServerError(e))
       }
     }
-  }).delete(checkJwt, async (req: Request<{ id: string }, {}, {}>, res: Response) => {
+  }).delete(checkJwt, ADMIN_SCOPE, async (req: Request<{ id: string }, {}, {}>, res: Response) => {
     try {
       const id: string = req.params.id
       

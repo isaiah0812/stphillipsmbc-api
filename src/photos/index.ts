@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { Document, MongoError, MongoServerError, ObjectId } from 'mongodb'
-import { checkJwt } from '../config/auth'
+import { ADMIN_SCOPE, checkJwt } from '../config/auth'
 import { cloud } from '../config/cloudinary'
 import { getDb } from '../config/db'
 import { InternalServerError, NotFoundError, ValidationError } from '../utils/errorHandling'
@@ -25,7 +25,7 @@ router.route("/")
 
       res.json(result as Photo[])
     })
-  }).post(checkJwt, upload.single('source'), async (req: Request<{}, {}, CreatePhotoForm>, res: Response) => {
+  }).post(checkJwt, ADMIN_SCOPE, upload.single('source'), async (req: Request<{}, {}, CreatePhotoForm>, res: Response) => {
     try {
       const blob = new Blob([req.file!.buffer]);
       const reader = (blob.stream() as ReadableStream<Uint8Array>).getReader();
@@ -39,7 +39,7 @@ router.route("/")
       } while (readBytes && !readBytes.done)
 
       const dataLink = `data:image/png;base64,${Buffer.from(photoBytes).toString('base64')}`
-      const uploadResult = await cloud.uploader.upload(dataLink, { public_id: 'test', folder: 'spmbc/gallery' })
+      const uploadResult = await cloud.uploader.upload(dataLink, { public_id: req.file!.filename, folder: 'spmbc/gallery' })
 
       const { name, description } = req.body
       const photo = new Photo({ name, description, url: uploadResult.secure_url, cloud_id: uploadResult.public_id })
@@ -59,7 +59,7 @@ router.route("/")
   })
 
 router.route("/:id")
-  .delete(checkJwt, async (req: Request, res: Response) => {
+  .delete(checkJwt, ADMIN_SCOPE, async (req: Request, res: Response) => {
     const id: string = req.params.id
     try {
       const foundPhoto: Photo | null = await photos.findOne<Photo>({ _id: new ObjectId(id) })
@@ -88,7 +88,7 @@ router.route("/:id")
         res.status(500).json(new InternalServerError(e));
       }
     }
-  }).put(checkJwt, async (req: Request<{ id: string }, {}, UpdatePhotoForm>, res: Response) => {
+  }).put(checkJwt, ADMIN_SCOPE, async (req: Request<{ id: string }, {}, UpdatePhotoForm>, res: Response) => {
     const id: string = req.params.id
     try {
       const foundPhoto: Photo | null = await photos.findOne<Photo>({ _id: new ObjectId(id) })
