@@ -42,3 +42,4 @@ main();
 // TODO common timezone (Central Time)
 // TODO batch create events
 // TODO batch create photos
+// TODO dateAdded field for photos
