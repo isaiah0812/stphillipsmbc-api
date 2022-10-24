@@ -35,3 +35,10 @@ const main = async () => {
 }
 
 main();
+
+// TODO add support for videos
+// TODO add OpenAPI spec
+// TODO make payloads RESTFul
+// TODO common timezone (Central Time)
+// TODO batch create events
+// TODO batch create photos
