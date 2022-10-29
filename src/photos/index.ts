@@ -103,8 +103,30 @@ router.route("/:id")
 
       console.info(`Updating event ${id} with fields:`, input)
 
+      const options: Partial<Document> = {}
+
+      if (input.name === '') {
+        if (!options['$unset']) options['$unset'] = {};
+
+        options['$unset'].name = '';
+      } else if (input.name) {
+        if (!options['$set']) options['$set'] = {};
+
+        options['$set'].name = input.name;
+      }
+
+      if (input.description === '') {
+        if (!options['$unset']) options['$unset'] = {};
+        
+        options['$unset'].description = '';
+      } else if (input.description) {
+        if (!options['$set']) options['$set'] = {};
+        
+        options['$set'].description = input.description;
+      }
+
       photo.update(input)
-      await photos.updateOne({ _id: new ObjectId(id) }, { $set: photo })
+      await photos.updateOne({ _id: new ObjectId(id) }, options);
       res.status(200).json(photo)
     } catch(e: any) {
       if (e instanceof MongoServerError) {
