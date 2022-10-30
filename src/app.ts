@@ -42,4 +42,3 @@ main();
 // TODO batch create events
 // TODO batch create photos
 // TODO dateAdded field for photos
-// TODO remove removed properties from updated photos
