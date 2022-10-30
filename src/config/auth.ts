@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config()
 
 export const checkJwt = auth({
-  audience: 'https://spmbc-api/',
+  audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER,
 })
 
