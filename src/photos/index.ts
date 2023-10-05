@@ -105,7 +105,7 @@ router.route("/:id")
 
       const options: Partial<Document> = {}
 
-      if (input.name === '') {
+      if (input.name === null || input.name === '') {
         if (!options['$unset']) options['$unset'] = {};
 
         options['$unset'].name = '';
@@ -115,7 +115,7 @@ router.route("/:id")
         options['$set'].name = input.name;
       }
 
-      if (input.description === '') {
+      if (input.description === null || input.description === '') {
         if (!options['$unset']) options['$unset'] = {};
         
         options['$unset'].description = '';
