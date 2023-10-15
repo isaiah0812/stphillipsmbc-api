@@ -20,3 +20,5 @@ src/
 tsconfig.json
 package*.json
 README.md
+
+.env*
