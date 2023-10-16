@@ -9,7 +9,8 @@
     "build": "tsc -p tsconfig.json",
     "dev": "ts-node-dev src/app.ts",
     "deploy": "npm run build && gcloud app deploy",
-    "gcp-build": ""
+    "gcp-build": "",
+    "test:deploy": "act -l"
   },
   "author": "Isaiah Bullard",
   "license": "ISC",
