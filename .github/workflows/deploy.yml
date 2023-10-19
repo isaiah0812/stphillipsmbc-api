@@ -34,7 +34,6 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WIP }}
           service_account: ${{ secrets.GCP_SA }}
-          audience: ${{ secrets.GCP_AUD }}
       - id: deploy
         name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1
