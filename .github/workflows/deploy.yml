@@ -38,7 +38,6 @@ jobs:
         name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
-          project_id: spmbc
           env_vars: |-
             AUTH0_ISSUER=${{ secrets.AUTH0_ISSUER }}
             CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}
