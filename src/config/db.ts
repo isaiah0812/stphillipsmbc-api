@@ -5,7 +5,7 @@ dotenv.config()
 
 const url = process.env.NODE_ENV === 'production'
   ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@spmbc.juctnny.mongodb.net/?retryWrites=true&w=majority`
-  : 'mongodb://localhost:27017';
+  : 'mongodb://127.0.0.1:27017';
 
 const client = new MongoClient(url);
 
