@@ -19,9 +19,9 @@ jobs:
         name: Get Repo
       - uses: actions/setup-node@v3
         id: node-setup
-        name: Set Up Node 16.x
+        name: Set Up Node 18.x
         with:
-          node-version: 16
+          node-version: 18
       - run: npm ci
         id: clean-install
         name: Install Node Packages
