@@ -36,21 +36,6 @@ jobs:
           vars: ${{ vars.REGION }}-docker.pkg.dev
       - id: build-image
         name: Build and Push Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run/stphillipsmbc-api:${{ inputs.ref }},${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run/stphillipsmbc-api:latest
-          build-args: |
-            audience=${{ secrets.AUTH0_AUDIENCE }}
-            issuer=${{ secrets.AUTH0_ISSUER }}
-            cloudinary_url=${{ secrets.CLOUDINARY_URL }}
-            mongo_user=${{ secrets.MONGO_USER }}
-            mongo_password=${{ secrets.MONGO_PASSWORD }}
-            env=production
-            port=8080
-      - id: build-image
-        name: Build and Push Image
         run: |-
           DOCKER_TAG="$${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
           docker build -t "${DOCKER_TAG}" . --build-arg audience=${{ secrets.AUTH0_AUDIENCE }} --build-arg issuer=${{ secrets.AUTH0_ISSUER }} --build-arg cloudinary_url=${{ secrets.CLOUDINARY_URL }} --build-arg mongo_user=${{ secrets.MONGO_USER }} --build-arg mongo_password=${{ secrets.MONGO_PASSWORD }} --build-arg env=production --build-arg port=8080
