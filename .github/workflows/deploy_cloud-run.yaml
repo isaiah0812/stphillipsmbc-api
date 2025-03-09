@@ -9,6 +9,7 @@ on:
 
 env:
   SERVICE: stphillipsmbc-api
+  DOCKER_TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run/${{ env.SERVICE }}:${{ github.sha }}
 
 jobs:
   deploy-api:
@@ -37,13 +38,12 @@ jobs:
       - id: build-image
         name: Build and Push Image
         run: |-
-          DOCKER_TAG="${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
-          docker build -t "${DOCKER_TAG}" . --build-arg audience=${{ secrets.AUTH0_AUDIENCE }} --build-arg issuer=${{ secrets.AUTH0_ISSUER }} --build-arg cloudinary_url=${{ secrets.CLOUDINARY_URL }} --build-arg mongo_user=${{ secrets.MONGO_USER }} --build-arg mongo_password=${{ secrets.MONGO_PASSWORD }} --build-arg env=production --build-arg port=8080
-          docker push ${DOCKER_TAG}
+          docker build -t ${{ env.DOCKER_TAG }} . --build-arg audience=${{ secrets.AUTH0_AUDIENCE }} --build-arg issuer=${{ secrets.AUTH0_ISSUER }} --build-arg cloudinary_url=${{ secrets.CLOUDINARY_URL }} --build-arg mongo_user=${{ secrets.MONGO_USER }} --build-arg mongo_password=${{ secrets.MONGO_PASSWORD }} --build-arg env=production --build-arg port=8080
+          docker push ${{ env.DOCKER_TAG }}
       - id: deploy
         name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE }}
           region: ${{ vars.REGION }}
-          image: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+          image: ${{ env.DOCKER_TAG }}
