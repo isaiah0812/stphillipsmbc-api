@@ -9,7 +9,7 @@ on:
 
 env:
   SERVICE: stphillipsmbc-api
-  DOCKER_TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run/${{ env.SERVICE }}:${{ github.sha }}
+  DOCKER_TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/cloud-run/stphillipsmbc-api:${{ github.sha }}
 
 jobs:
   deploy-api:
