@@ -47,7 +47,3 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ env.DOCKER_TAG }}
-      - id: make-public
-        name: Make Deployment Public
-        run:
-          gcloud run services add-iam-policy-binding ${{ env.SERVICE }} --member="allUsers" --role="roles/run.invoker"
